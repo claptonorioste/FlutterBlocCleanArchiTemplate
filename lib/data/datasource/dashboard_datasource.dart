@@ -13,7 +13,7 @@ class DashboardDataSourceImpl implements DashboardDataSource {
       await Future.delayed(const Duration(seconds: 2));
       return Right(TestEntity(text: 'Hello World'));
     } catch (e) {
-      return Left(ErroMessage(message: e.toString()));
+      return Left(ErrorMessage(message: e.toString()));
     }
   }
 }
