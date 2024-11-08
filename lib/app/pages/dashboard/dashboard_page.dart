@@ -17,14 +17,49 @@ class _DashboardPageState extends State<DashboardPage> {
     return BlocProvider(
       create: (context) => DashboardBloc(),
       child: BlocConsumer<DashboardBloc, DashboardState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return const Scaffold(
-              body: Center(
-                child: Text('Dashboard Page'),
-              ),
-            );
-          }),
+          listener: (context, state) {
+        if (state.status == Status.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(state.errorMessage ?? 'An error occurred'),
+            ),
+          );
+        }
+      }, builder: (context, state) {
+        return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                state.isLoading
+                    ? const CircularProgressIndicator()
+                    : Text((state.someText?.isEmpty ?? true)
+                        ? 'Tap the button to get some text'
+                        : state.someText ?? ''),
+                MaterialButton(
+                  color: Colors.blue,
+                  onPressed: () {
+                    context
+                        .read<DashboardBloc>()
+                        .add(const DashboardEvent.getSomeText());
+                  },
+                  child: const Text('Get Data'),
+                ),
+                MaterialButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    context.read<DashboardBloc>().add(
+                        const DashboardEvent.getSomeText(triggerError: true));
+                  },
+                  child: const Text('Trigger Error'),
+                )
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }

@@ -5,7 +5,14 @@ import 'package:flutter_bloc_clean_architecture/domain/entities/test_entities.da
 import 'package:flutter_bloc_clean_architecture/domain/repositories/test_repository.dart';
 
 class GetSomeTextUseCase {
-  Future<Either<Failure, TestEntity>> getSomeText() {
-    return serviceLocator<TestRepository>().getSomeText();
+  Future<Either<Failure, TestEntity>> getSomeText({bool? triggerError}) async {
+    try {
+      if (triggerError == true) {
+        throw Exception('Something went wrong');
+      }
+      return serviceLocator<TestRepository>().getSomeText();
+    } on Exception catch (e) {
+      return Left(ErrorMessage(message: e.toString()));
+    }
   }
 }

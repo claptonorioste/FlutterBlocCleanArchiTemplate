@@ -10,7 +10,7 @@ class DashboardDataSourceImpl implements DashboardDataSource {
   @override
   Future<Either<Failure, TestEntity>> getSomeText() async {
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       return Right(TestEntity(text: 'Hello World'));
     } catch (e) {
       return Left(ErrorMessage(message: e.toString()));
